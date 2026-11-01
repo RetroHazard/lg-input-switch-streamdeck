@@ -1,0 +1,9 @@
+{
+	"name": "lg-input-switch-streamdeck",
+	"private": true,
+	"type": "module",
+	"dependencies": {
+		"@elgato/streamdeck": "3.0.4",
+		"koffi": "3.3.6"
+	}
+}

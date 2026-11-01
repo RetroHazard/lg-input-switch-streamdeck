@@ -54,6 +54,16 @@ All logic lives in `lg_switch.py` (~275 lines, no dependencies beyond stdlib):
 - `_i2c_write()` — iterates output masks and port IDs, sends packet, returns True on first success
 - `main()` — CLI entry point via argparse
 
+### Stream Deck plugin (`streamdeck/`)
+
+`streamdeck/io.github.retrohazard.lg-input-switch.sdPlugin/` is a Node.js Stream Deck plugin (SDK v3, Node 24, plain ESM JS, no build step):
+
+- `bin/nvapi.js` — JS port of the NVAPI I2C path via `koffi`. **Keep `INPUTS`, the packet layout, function IDs, `NV_I2C_INFO` layout and the mask/port loop in sync with `lg_switch.py`.**
+- `bin/plugin.js` — `Switch Input` and `Toggle Inputs` actions
+- `ui/` — property inspectors (vendored `sdpi-components.js` v4)
+- `.npmrc` pins `os=win32`/`cpu=x64` so `npm install` from WSL fetches the Windows koffi binary
+- Validate/pack: `npx @elgato/cli validate|pack <dir>`; the plugin `Icon` must be PNG, other images may be SVG
+
 ## Development constraints
 
 - **Windows only** — uses `ctypes.WinDLL`, `nvapi64.dll`, and Windows-specific kernel32 APIs

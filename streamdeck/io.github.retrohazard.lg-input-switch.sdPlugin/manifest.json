@@ -1,0 +1,65 @@
+{
+	"$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+	"UUID": "io.github.retrohazard.lg-input-switch",
+	"Name": "LG Input Switch",
+	"Version": "1.0.0.0",
+	"Author": "RetroHazard",
+	"Description": "Switch LG monitor inputs over NVAPI raw I2C (DDC/CI source address 0x50). Windows + NVIDIA only.",
+	"URL": "https://github.com/RetroHazard/lg-input-switch-streamdeck",
+	"Icon": "imgs/plugin/icon",
+	"Category": "LG Input Switch",
+	"CategoryIcon": "imgs/plugin/category",
+	"CodePath": "bin/plugin.js",
+	"SDKVersion": 3,
+	"Nodejs": {
+		"Version": "24"
+	},
+	"OS": [
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Software": {
+		"MinimumVersion": "7.1"
+	},
+	"Actions": [
+		{
+			"UUID": "io.github.retrohazard.lg-input-switch.switch",
+			"Name": "Switch Input",
+			"Tooltip": "Switch all LG monitors on the NVIDIA GPU to one input.",
+			"Icon": "imgs/actions/switch",
+			"PropertyInspectorPath": "ui/switch.html",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/key",
+					"TitleAlignment": "bottom"
+				}
+			]
+		},
+		{
+			"UUID": "io.github.retrohazard.lg-input-switch.toggle",
+			"Name": "Toggle Inputs",
+			"Tooltip": "Toggle all LG monitors on the NVIDIA GPU between two inputs.",
+			"Icon": "imgs/actions/toggle",
+			"PropertyInspectorPath": "ui/toggle.html",
+			"Controllers": [
+				"Keypad"
+			],
+			"DisableAutomaticStates": true,
+			"States": [
+				{
+					"Image": "imgs/actions/key",
+					"TitleAlignment": "bottom"
+				},
+				{
+					"Image": "imgs/actions/key-alt",
+					"TitleAlignment": "bottom"
+				}
+			]
+		}
+	]
+}

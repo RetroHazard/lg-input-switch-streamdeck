@@ -209,3 +209,6 @@ __marimo__/
 
 # lg-input-switch user config (contains local state, not for version control)
 config.json
+
+# Stream Deck plugin dependencies (installed with npm, see README)
+node_modules/
