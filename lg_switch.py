@@ -265,7 +265,7 @@ def _set_startup(enabled: bool) -> None:
         winreg.HKEY_CURRENT_USER, _STARTUP_REG_KEY, 0, winreg.KEY_SET_VALUE
     ) as key:
         if enabled:
-            winreg.SetValueEx(key, _STARTUP_REG_NAME, 0, winreg.REG_SZ, sys.executable)
+            winreg.SetValueEx(key, _STARTUP_REG_NAME, 0, winreg.REG_SZ, f'"{sys.executable}"')
         else:
             try:
                 winreg.DeleteValue(key, _STARTUP_REG_NAME)
