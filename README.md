@@ -1,5 +1,7 @@
 # lg-input-switch
 
+> Fork of [meer-cha/lg-input-switch](https://github.com/meer-cha/lg-input-switch) that adds a native [Stream Deck plugin](#option-d--stream-deck-plugin) and confirms support for the LG 27G850A-B (including two monitors switching together).
+
 Command-line input switcher for the **LG 45GX950A-B** monitor on Windows for nvidia GPUs.
 
 Also includes experimental Picture-by-Picture controls for the same monitor.
@@ -14,13 +16,20 @@ The fix is to bypass the Windows DDC/CI stack entirely and write the raw I2C pac
 
 - Windows 10/11
 - NVIDIA GPU with up-to-date drivers (RTX series confirmed working)
-- LG 45GX950A-B connected via DisplayPort or HDMI (USB-C confirmed working too)
+- LG 45GX950A-B or 27G850A-B connected via DisplayPort or HDMI (USB-C confirmed working too on the 45GX950A-B)
+
+### Tested monitors
+
+| Model | Inputs confirmed | Notes |
+|-------|------------------|-------|
+| 45GX950A-B | `dp`, `hdmi1`, `hdmi2`, `usbc`, PBP | |
+| 27G850A-B | `dp`, `hdmi1`, `hdmi2` | No USB-C input or PBP. Two monitors on one GPU switch together. |
 
 ## Installation
 
 ### Option A — pre-built executables (no Python required)
 
-1. Go to the [Releases](https://github.com/meer-cha/lg-input-switch/releases) page and download the `.zip` from the latest release (not the "Source code (zip)")
+1. Go to the upstream [Releases](https://github.com/meer-cha/lg-input-switch/releases) page and download the `.zip` from the latest release (not the "Source code (zip)")
 2. Create a new folder anywhere (e.g. `C:\Users\You\LG Input Switch`)
 3. Extract the contents of the zip into that folder
 4. Run `lg-input-switch.exe` — it will guide you through setup on the first run, then hide seamlessly into your system tray and start listening for your hotkey.
@@ -34,8 +43,8 @@ The fix is to bypass the Windows DDC/CI stack entirely and write the raw I2C pac
 Requires Python 3.10+ and the packages in `requirements.txt`.
 
 ```
-git clone https://github.com/meer-cha/lg-input-switch.git
-cd lg-input-switch
+git clone https://github.com/RetroHazard/lg-input-switch-streamdeck.git
+cd lg-input-switch-streamdeck
 pip install -r requirements.txt
 python lg_switch.py configure
 python lg_switch.py daemon
@@ -46,12 +55,35 @@ python lg_switch.py daemon
 Requires Python 3.10+ and pip.
 
 ```
-git clone https://github.com/meer-cha/lg-input-switch.git
-cd lg-input-switch
+git clone https://github.com/RetroHazard/lg-input-switch-streamdeck.git
+cd lg-input-switch-streamdeck
 build.bat
 ```
 
 The executables will be in the `dist\` folder.
+
+### Option D — Stream Deck plugin
+
+A native Stream Deck plugin lives in `streamdeck/`. It talks to NVAPI directly (via [koffi](https://koffi.dev)), so it needs neither Python nor the exe, and no console window flashes on a key press. Requires Stream Deck 7.1+ on Windows.
+
+Build it (from Windows, WSL or Linux; `.npmrc` pins the Windows x64 binaries):
+
+```
+cd streamdeck/io.github.retrohazard.lg-input-switch.sdPlugin
+npm install
+cd ..
+npx @elgato/cli validate io.github.retrohazard.lg-input-switch.sdPlugin
+npx @elgato/cli pack io.github.retrohazard.lg-input-switch.sdPlugin -o dist
+```
+
+Double-click `streamdeck/dist/io.github.retrohazard.lg-input-switch.streamDeckPlugin` to install. The **LG Input Switch** category then offers two actions:
+
+| Action | Settings | On key press |
+|--------|----------|--------------|
+| **Switch Input** | one input | Switches to that input. |
+| **Toggle Inputs** | Input A, Input B | Switches to whichever input the key isn't showing, then shows the new one. |
+
+Like the CLI, every press is sent to every display on the first NVIDIA GPU, so identical monitors switch together. A green check means the GPU accepted the I2C write; the monitor itself never acknowledges. A yellow alert means NVAPI failed (see the plugin log in `%APPDATA%\Elgato\StreamDeck\Plugins\io.github.retrohazard.lg-input-switch.sdPlugin\logs`). The toggle key keeps its own state, separate from the tray daemon's.
 
 ## Usage
 
